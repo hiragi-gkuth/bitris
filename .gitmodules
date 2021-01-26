@@ -1,0 +1,6 @@
+[submodule "src/bsshd"]
+	path = src/bsshd
+	url = github.com:/hiragi-gkuth/bsshd.git
+[submodule "src/analyzer"]
+	path = src/analyzer
+	url = github.com:/hiragi-gkuth/bitris-analyzer.git
