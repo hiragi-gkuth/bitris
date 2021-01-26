@@ -1,0 +1,49 @@
+version: '3'
+services:
+  honeypot:
+    build: vm/honeypot/
+    container_name: "honeypot"
+    ports: 
+      - "2200:22"
+    volumes: 
+      - ./src/bsshd:/go/src/bsshd
+    depends_on: 
+      - fluent
+    tty: true
+  operation:
+    build: vm/operation/
+    container_name: "operation"
+    ports:
+      - "2222:22"
+    volumes:
+      - ./src/bsshd:/go/src/bsshd
+    depends_on: 
+      - fluent
+    tty: true
+  fluent:
+    build: vm/fluent/
+    container_name: "fluent"
+    ports:
+      - "24224"
+    volumes: 
+      - ./vm/fluent/files:/files
+    depends_on: 
+      - db
+  db:
+    build: vm/db/
+    container_name: "db"
+    ports:
+      - "3306"
+    volumes:
+      - ./vm/db/files:/files
+    environment: 
+      MYSQL_ROOT_PASSWORD: toor
+      MYSQL_DATABASE: bitris
+      MYSQL_INITDB_SKIP_TZINFO: 1
+    tty: true
+  analyze: 
+    build: vm/analyze/
+    container_name: "analyze"
+    volumes: 
+      - ./src/analyzer:/go/src/analyzer
+    tty: true
